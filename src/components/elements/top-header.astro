@@ -1,6 +1,7 @@
 ---
 import { SITE } from "@/lib/config";
 import ThemeController from "../bases/theme-controller.astro";
+import MenuDropdown from "./menu-dropdown.astro";
 ---
 
 <div class="navbar border-b border-white/20">
@@ -21,7 +22,10 @@ import ThemeController from "../bases/theme-controller.astro";
       Krypton Game
     </a>
   </div>
-  <div class="navbar-end">
+  <div class="navbar-end flex items-center gap-2">
+    <div class="lg:hidden">
+      <MenuDropdown />
+    </div>
     <ThemeController />
   </div>
 </div>

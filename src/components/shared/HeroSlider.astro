@@ -40,7 +40,7 @@ const slidesData = await Promise.all(
       {
         slidesData.map(({ article, category, remarkPluginFrontmatter }, index) => (
           <div
-            class={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${
+            class={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out ${
               index === 0 ? 'opacity-100 z-20' : 'opacity-0 z-10'
             }`}
             data-slide={index}
@@ -52,8 +52,6 @@ const slidesData = await Promise.all(
                 alt={article.data.covert_alt || article.data.title}
                 class="w-full h-full object-cover"
                 loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-                fetchpriority={index === 0 ? "high" : "low"}
               />
               <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
             </div>
@@ -173,6 +171,7 @@ const slidesData = await Promise.all(
     }
 
     private init() {
+      // Add event listeners
       this.prevButton.addEventListener('click', () => this.prevSlide());
       this.nextButton.addEventListener('click', () => this.nextSlide());
       
@@ -180,17 +179,17 @@ const slidesData = await Promise.all(
         indicator.addEventListener('click', () => this.goToSlide(index));
       });
 
+      // Pause on hover
       this.slider.addEventListener('mouseenter', () => this.pauseAutoplay());
       this.slider.addEventListener('mouseleave', () => this.startAutoplay());
 
+      // Start autoplay if enabled
       if (this.isAutoplay) {
         this.startAutoplay();
       }
     }
 
     private goToSlide(index: number) {
-      if (index === this.currentSlide) return;
-      
       // Hide current slide
       this.slides[this.currentSlide].classList.remove('opacity-100', 'z-20');
       this.slides[this.currentSlide].classList.add('opacity-0', 'z-10');

@@ -1,13 +1,8 @@
 ---
 import { NAVIGATION_LINKS } from "@/lib/config";
-import { categoriesHandler } from "@/lib/handlers/categories";
 import NavbarItem from "../bases/navbar-item.astro";
-import Menu from "@/assets/svgs/menu.astro";
-
-const categories = categoriesHandler.allCategories();
 ---
 
-<!-- Desktop Navigation -->
 <nav class="navbar-center hidden lg:flex container">
   <ul class="menu menu-sm menu-horizontal px-1 mx-auto">
     <NavbarItem item={{ href: "/", text: "Home" }} />
@@ -15,86 +10,3 @@ const categories = categoriesHandler.allCategories();
     {NAVIGATION_LINKS.map((item) => <NavbarItem item={item} />)}
   </ul>
 </nav>
-
-<!-- Mobile Navigation -->
-<div class="navbar-center lg:hidden">
-  <div class="dropdown">
-    <button
-      tabindex="0"
-      role="button"
-      class="btn btn-ghost btn-circle text-white hover:bg-white/20 hover:text-yellow-300 transition-all duration-300"
-      aria-label="Menu"
-    >
-      <Menu />
-    </button>
-
-    <ul
-      tabindex="0"
-      class="menu dropdown-content z-50 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-box w-56 shadow-2xl border border-white/20 backdrop-blur-sm"
-    >
-      <li>
-        <a
-          href="/"
-          aria-label="Homepage"
-          class="hover:bg-gradient-to-r hover:from-pink-500 hover:to-rose-500 hover:text-white transition-all duration-300"
-        >
-          🏠 Home
-        </a>
-      </li>
-      <li>
-        <a
-          href="/articles"
-          aria-label="Articles Page"
-          class="hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 hover:text-white transition-all duration-300"
-        >
-          📰 Articles
-        </a>
-      </li>
-
-      <!-- Category Select Dropdown -->
-      <li>
-        <details>
-          <summary
-            class="hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500 hover:text-white transition-all duration-300"
-          >
-            🗂️ Categories
-          </summary>
-          <ul>
-            {
-              categories.map((category) => (
-                <li>
-                  <a
-                    href={`/categories/${category.id}`}
-                    aria-label={category.data.title}
-                    class="hover:bg-gradient-to-r hover:from-green-500 hover:to-emerald-500 hover:text-white transition-all duration-300"
-                  >
-                    {category.data.title}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </details>
-      </li>
-
-      <li>
-        <a
-          href="/authors"
-          aria-label="Authors Page"
-          class="hover:bg-gradient-to-r hover:from-yellow-500 hover:to-orange-500 hover:text-white transition-all duration-300"
-        >
-          👥 Authors
-        </a>
-      </li>
-      <li>
-        <a
-          href="/about"
-          aria-label="About Page"
-          class="hover:bg-gradient-to-r hover:from-teal-500 hover:to-cyan-500 hover:text-white transition-all duration-300"
-        >
-          ℹ️ About
-        </a>
-      </li>
-    </ul>
-  </div>
-</div>

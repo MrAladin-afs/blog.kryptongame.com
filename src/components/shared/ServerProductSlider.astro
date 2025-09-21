@@ -23,7 +23,7 @@ const { products, autoplay = true, interval = 5000 } = Astro.props;
       {
         products.map((product, index) => (
           <div
-            class={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${
+            class={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out ${
               index === 0 ? 'opacity-100 z-20' : 'opacity-0 z-10'
             }`}
             data-slide={index}
@@ -35,8 +35,6 @@ const { products, autoplay = true, interval = 5000 } = Astro.props;
                 alt={product.title}
                 class="w-full h-full object-cover zoom-image transition-transform duration-300 ease-out"
                 loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-                fetchpriority={index === 0 ? "high" : "low"}
               />
               <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
             </div>
@@ -153,6 +151,7 @@ const { products, autoplay = true, interval = 5000 } = Astro.props;
     }
 
     private init() {
+      // Add event listeners
       this.prevButton.addEventListener('click', () => this.prevSlide());
       this.nextButton.addEventListener('click', () => this.nextSlide());
       
@@ -160,19 +159,22 @@ const { products, autoplay = true, interval = 5000 } = Astro.props;
         indicator.addEventListener('click', () => this.goToSlide(index));
       });
 
+      // Pause on hover
       this.slider.addEventListener('mouseenter', () => this.pauseAutoplay());
       this.slider.addEventListener('mouseleave', () => this.startAutoplay());
 
-      // Simplified drag events
+      // Add mouse drag events for zoom effect
       this.slider.addEventListener('mousedown', (e) => this.handleMouseDown(e));
       this.slider.addEventListener('mousemove', (e) => this.handleMouseMove(e));
       this.slider.addEventListener('mouseup', () => this.handleMouseUp());
       this.slider.addEventListener('mouseleave', () => this.handleMouseUp());
 
+      // Add touch events for mobile support
       this.slider.addEventListener('touchstart', (e) => this.handleTouchStart(e));
       this.slider.addEventListener('touchmove', (e) => this.handleTouchMove(e));
       this.slider.addEventListener('touchend', () => this.handleMouseUp());
 
+      // Start autoplay if enabled
       if (this.isAutoplay) {
         this.startAutoplay();
       }
@@ -192,9 +194,11 @@ const { products, autoplay = true, interval = 5000 } = Astro.props;
       const deltaY = e.clientY - this.dragStartY;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
       
+      // Calculate zoom factor based on drag distance
       const maxDistance = 100;
       const zoomFactor = Math.min(1 + (distance / maxDistance) * 0.3, 1.3);
       
+      // Apply zoom to current slide's image
       const currentSlideElement = this.slides[this.currentSlide];
       const zoomImage = currentSlideElement.querySelector('.zoom-image') as HTMLElement;
       
@@ -209,6 +213,7 @@ const { products, autoplay = true, interval = 5000 } = Astro.props;
       this.isDragging = false;
       this.slider.style.cursor = 'grab';
       
+      // Reset zoom
       const currentSlideElement = this.slides[this.currentSlide];
       const zoomImage = currentSlideElement.querySelector('.zoom-image') as HTMLElement;
       
@@ -232,9 +237,11 @@ const { products, autoplay = true, interval = 5000 } = Astro.props;
       const deltaY = e.touches[0].clientY - this.dragStartY;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
       
+      // Calculate zoom factor based on drag distance
       const maxDistance = 100;
       const zoomFactor = Math.min(1 + (distance / maxDistance) * 0.3, 1.3);
       
+      // Apply zoom to current slide's image
       const currentSlideElement = this.slides[this.currentSlide];
       const zoomImage = currentSlideElement.querySelector('.zoom-image') as HTMLElement;
       
@@ -244,8 +251,6 @@ const { products, autoplay = true, interval = 5000 } = Astro.props;
     }
 
     private goToSlide(index: number) {
-      if (index === this.currentSlide) return;
-      
       // Reset zoom on slide change
       this.slides[this.currentSlide].querySelector('.zoom-image')?.style.setProperty('transform', 'scale(1)');
       
