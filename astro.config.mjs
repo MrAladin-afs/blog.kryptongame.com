@@ -29,9 +29,29 @@ export default defineConfig({
   image: {
     responsiveStyles: true,
     breakpoints: [640, 1024],
+    // Optimize image delivery
+    domains: ['files.fivemerr.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'files.fivemerr.com',
+        port: '',
+        pathname: '/images/**',
+      },
+    ],
   },
   integrations,
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // Optimize build output
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
+    },
   },
 });
