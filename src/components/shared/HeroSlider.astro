@@ -1,0 +1,251 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import Divider from "@/components/bases/divider.astro";
+import { categoriesHandler } from "@/lib/handlers/categories";
+import { getDateDistance } from "@/lib/utils/date";
+
+type Props = {
+  articles: CollectionEntry<"articles">[];
+  autoplay?: boolean;
+  interval?: number;
+};
+
+const { articles, autoplay = true, interval = 5000 } = Astro.props;
+
+// Process articles to get required data
+const slidesData = await Promise.all(
+  articles.map(async (article) => {
+    const { remarkPluginFrontmatter } = await render(article);
+    const category = categoriesHandler.oneCategory(article.data.category.id);
+    return {
+      article,
+      category,
+      remarkPluginFrontmatter,
+    };
+  })
+);
+---
+
+<section class="hero-slider container mx-auto mt-8 mb-8">
+  <div
+    class="relative w-full overflow-hidden rounded-lg"
+    data-hero-slider="true"
+    data-autoplay={autoplay.toString()}
+    data-interval={interval.toString()}
+  >
+    <!-- Slider wrapper -->
+    <div class="relative h-64 md:h-96 lg:h-[500px] overflow-hidden rounded-lg">
+      {
+        slidesData.map(({ article, category, remarkPluginFrontmatter }, index) => (
+          <div
+            class={`absolute top-0 left-0 w-full h-full transition-all duration-700 ease-in-out ${
+              index === 0 ? 'opacity-100 z-20' : 'opacity-0 z-10'
+            }`}
+            data-slide={index}
+          >
+            <!-- Background Image -->
+            <div class="absolute inset-0 z-0">
+              <Image
+                src={article.data.cover}
+                alt={article.data.covert_alt || article.data.title}
+                class="w-full h-full object-cover"
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+              <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
+            </div>
+            
+            <!-- Content Overlay -->
+            <div class="relative z-10 h-full flex items-center">
+              <div class="container mx-auto px-4">
+                <div class="max-w-2xl text-white">
+                  <div class="flex items-center text-sm mb-3">
+                    <span class="bg-primary px-3 py-1 rounded-full text-primary-content font-medium">
+                      {category.data.title}
+                    </span>
+                    <span class="mx-3 opacity-75">•</span>
+                    <span class="opacity-75">
+                      {getDateDistance(remarkPluginFrontmatter.lastModified)}
+                    </span>
+                  </div>
+                  
+                  <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold font-serif mb-4 leading-tight">
+                    <a 
+                      href={`/articles/${article.id}`}
+                      class="hover:underline underline-offset-4 decoration-2"
+                    >
+                      {article.data.title}
+                    </a>
+                  </h1>
+                  
+                  <p class="text-lg opacity-90 mb-6 line-clamp-3">
+                    {article.data.description}
+                  </p>
+                  
+                  <a
+                    href={`/articles/${article.id}`}
+                    class="inline-flex items-center px-6 py-3 bg-primary text-primary-content font-medium rounded-lg hover:bg-primary/90 transition-colors duration-200"
+                  >
+                    Read More
+                    <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30">
+      <div class="flex space-x-2">
+        {
+          slidesData.map((_, index) => (
+            <button
+              type="button"
+              class={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === 0 
+                  ? "bg-white scale-110" 
+                  : "bg-white/50 hover:bg-white/75"
+              }`}
+              aria-current={index === 0}
+              aria-label={`Go to slide ${index + 1}`}
+              data-slide-indicator={index}
+            />
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button
+      type="button"
+      class="absolute top-1/2 left-4 transform -translate-y-1/2 z-30 p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-200 group"
+      data-slide-prev
+      aria-label="Previous slide"
+    >
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <button
+      type="button"
+      class="absolute top-1/2 right-4 transform -translate-y-1/2 z-30 p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-200 group"
+      data-slide-next
+      aria-label="Next slide"
+    >
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  class HeroSlider {
+    private slider: HTMLElement;
+    private slides: NodeListOf<HTMLElement>;
+    private indicators: NodeListOf<HTMLButtonElement>;
+    private prevButton: HTMLButtonElement;
+    private nextButton: HTMLButtonElement;
+    private currentSlide: number = 0;
+    private autoplayInterval: NodeJS.Timeout | null = null;
+    private isAutoplay: boolean;
+    private interval: number;
+
+    constructor(slider: HTMLElement) {
+      this.slider = slider;
+      this.slides = slider.querySelectorAll('[data-slide]');
+      this.indicators = slider.querySelectorAll('[data-slide-indicator]');
+      this.prevButton = slider.querySelector('[data-slide-prev]')!;
+      this.nextButton = slider.querySelector('[data-slide-next]')!;
+      this.isAutoplay = slider.dataset.autoplay === 'true';
+      this.interval = parseInt(slider.dataset.interval || '5000');
+
+      this.init();
+    }
+
+    private init() {
+      // Add event listeners
+      this.prevButton.addEventListener('click', () => this.prevSlide());
+      this.nextButton.addEventListener('click', () => this.nextSlide());
+      
+      this.indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => this.goToSlide(index));
+      });
+
+      // Pause on hover
+      this.slider.addEventListener('mouseenter', () => this.pauseAutoplay());
+      this.slider.addEventListener('mouseleave', () => this.startAutoplay());
+
+      // Start autoplay if enabled
+      if (this.isAutoplay) {
+        this.startAutoplay();
+      }
+    }
+
+    private goToSlide(index: number) {
+      // Hide current slide
+      this.slides[this.currentSlide].classList.remove('opacity-100', 'z-20');
+      this.slides[this.currentSlide].classList.add('opacity-0', 'z-10');
+      this.indicators[this.currentSlide].classList.remove('bg-white', 'scale-110');
+      this.indicators[this.currentSlide].classList.add('bg-white/50');
+      this.indicators[this.currentSlide].setAttribute('aria-current', 'false');
+
+      // Show new slide
+      this.currentSlide = index;
+      this.slides[this.currentSlide].classList.remove('opacity-0', 'z-10');
+      this.slides[this.currentSlide].classList.add('opacity-100', 'z-20');
+      this.indicators[this.currentSlide].classList.remove('bg-white/50');
+      this.indicators[this.currentSlide].classList.add('bg-white', 'scale-110');
+      this.indicators[this.currentSlide].setAttribute('aria-current', 'true');
+    }
+
+    private nextSlide() {
+      const nextIndex = (this.currentSlide + 1) % this.slides.length;
+      this.goToSlide(nextIndex);
+    }
+
+    private prevSlide() {
+      const prevIndex = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+      this.goToSlide(prevIndex);
+    }
+
+    private startAutoplay() {
+      if (this.isAutoplay && !this.autoplayInterval) {
+        this.autoplayInterval = setInterval(() => {
+          this.nextSlide();
+        }, this.interval);
+      }
+    }
+
+    private pauseAutoplay() {
+      if (this.autoplayInterval) {
+        clearInterval(this.autoplayInterval);
+        this.autoplayInterval = null;
+      }
+    }
+  }
+
+  // Initialize all hero sliders
+  document.addEventListener('DOMContentLoaded', () => {
+    const sliders = document.querySelectorAll('[data-hero-slider]');
+    sliders.forEach(slider => {
+      new HeroSlider(slider as HTMLElement);
+    });
+  });
+</script>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

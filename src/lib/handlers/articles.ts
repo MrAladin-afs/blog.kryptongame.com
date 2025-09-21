@@ -40,4 +40,11 @@ export const articlesHandler = {
       );
     return subHeadlines;
   },
+
+  // New method for hero slider articles
+  heroSliderArticles: () => {
+    // Get the most recent 5 articles for the hero slider
+    // You can modify this logic to use a specific field like isHeroSlide if you prefer
+    return articlesCollection.slice(0, 5);
+  },
 };

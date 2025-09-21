@@ -23,15 +23,51 @@ function isActive(item: Link, currentPath: string) {
 function formatHref(href: string) {
   return href === "/" ? "/" : `${href}/1`;
 }
+
+// Color mapping for different navigation items
+const getItemColor = (text: string) => {
+  const colors = {
+    Home: "from-pink-500 to-rose-500",
+    Articles: "from-blue-500 to-cyan-500",
+    Technology: "from-purple-500 to-indigo-500",
+    Programming: "from-green-500 to-emerald-500",
+    Lifestyle: "from-yellow-500 to-orange-500",
+    Productivity: "from-red-500 to-pink-500",
+    Health: "from-teal-500 to-green-500",
+    Finance: "from-amber-500 to-yellow-500",
+  };
+  return colors[text as keyof typeof colors] || "from-gray-500 to-gray-600";
+};
 ---
 
 <li
   class:list={[
-    "relative after:absolute after:-bottom-2 after:left-0 after:h-[1.5px] after:w-full after:transition-all after:duration-300",
+    "relative after:absolute after:-bottom-2 after:left-0 after:h-[3px] after:w-full after:transition-all after:duration-300",
     isActive(item, currentPath)
-      ? "after:bg-base-content pointer-events-none"
-      : "after:bg-transparent",
+      ? "after:bg-purple-500"
+      : "after:bg-transparent hover:after:bg-white/50",
   ]}
 >
-  <a href={formatHref(item.href)} aria-label={item.text}>{item.text}</a>
+  <a
+    href={formatHref(item.href)}
+    aria-label={item.text}
+    class:list={[
+      "text-white font-medium transition-all duration-300",
+      "hover:text-purple-300",
+      isActive(item, currentPath) ? "text-purple-500 font-bold" : "",
+    ]}
+  >
+    {item.text}
+  </a>
 </li>
+
+<style>
+  /* Ensure purple color takes precedence for active navigation items */
+  li a.text-purple-500 {
+    color: rgb(168 85 247) !important;
+  }
+
+  li a.text-purple-500:hover {
+    color: rgb(196 181 253) !important;
+  }
+</style>

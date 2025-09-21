@@ -7,7 +7,7 @@ import { NAVIGATION_LINKS, OTHER_LINKS } from "@/lib/config";
   <button
     tabindex="0"
     role="button"
-    class="btn btn-ghost btn-circle"
+    class="btn btn-ghost btn-circle text-white hover:bg-white/20 hover:text-yellow-300 transition-all duration-300"
     aria-label="Menu"
   >
     <Menu />
@@ -15,19 +15,44 @@ import { NAVIGATION_LINKS, OTHER_LINKS } from "@/lib/config";
 
   <ul
     tabindex="0"
-    class="menu dropdown-content z-50 bg-base-100 rounded-box w-56 shadow"
+    class="menu dropdown-content z-50 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-box w-56 shadow-2xl border border-white/20 backdrop-blur-sm"
   >
-    <li><a href="/" aria-label="Homepage">Home</a></li>
-    <li><a href="/articles" aria-label="Articles Page">Articles</a></li>
+    <li>
+      <a
+        href="/"
+        aria-label="Homepage"
+        class="hover:bg-gradient-to-r hover:from-pink-500 hover:to-rose-500 hover:text-white transition-all duration-300"
+      >
+        🏠 Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/articles"
+        aria-label="Articles Page"
+        class="hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 hover:text-white transition-all duration-300"
+      >
+        📰 Articles
+      </a>
+    </li>
 
     <li>
       <details>
-        <summary>Categories</summary>
+        <summary
+          class="hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500 hover:text-white transition-all duration-300"
+        >
+          🗂️ Categories
+        </summary>
         <ul>
           {
             NAVIGATION_LINKS.map(({ href, text, target }) => (
               <li>
-                <a href={href} target={target ?? "_self"} aria-label={text}>
+                <a
+                  href={href}
+                  target={target ?? "_self"}
+                  aria-label={text}
+                  class="hover:bg-gradient-to-r hover:from-green-500 hover:to-emerald-500 hover:text-white transition-all duration-300"
+                >
                   {text}
                 </a>
               </li>
@@ -39,12 +64,21 @@ import { NAVIGATION_LINKS, OTHER_LINKS } from "@/lib/config";
 
     <li>
       <details>
-        <summary>Other Pages</summary>
+        <summary
+          class="hover:bg-gradient-to-r hover:from-yellow-500 hover:to-orange-500 hover:text-white transition-all duration-300"
+        >
+          📄 Other Pages
+        </summary>
         <ul>
           {
             OTHER_LINKS.map(({ href, text, target }) => (
               <li>
-                <a href={href} target={target ?? "_self"} aria-label={text}>
+                <a
+                  href={href}
+                  target={target ?? "_self"}
+                  aria-label={text}
+                  class="hover:bg-gradient-to-r hover:from-teal-500 hover:to-cyan-500 hover:text-white transition-all duration-300"
+                >
                   {text}
                 </a>
               </li>

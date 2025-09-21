@@ -1,33 +1,27 @@
 ---
-import Github from "@/assets/svgs/github.astro";
-import Search01 from "@/assets/svgs/search-01.astro";
-import MenuDropdown from "./menu-dropdown.astro";
 import { SITE } from "@/lib/config";
 import ThemeController from "../bases/theme-controller.astro";
 ---
 
-<div
-  class="navbar border-b border-primary-content/80 dark:border-primary-content/20"
->
+<div class="navbar border-b border-white/20">
   <div class="navbar-start lg:w-1/2">
-    <MenuDropdown />
-    <a class="text-xl px-2 text-nowrap lg:hidden" href="/">{SITE.title}</a>
+    <a href="/" class="flex items-center">
+      <img
+        src="https://files.fivemerr.com/images/ac6462c4-e383-4afb-97a2-e6be2e9c7294.png"
+        alt="Logo"
+        class="h-12 w-auto"
+      />
+    </a>
   </div>
   <div class="navbar-center hidden lg:flex">
-    <a class="text-xl px-2" href="/">{SITE.title}</a>
+    <a
+      href="/"
+      class="text-2xl font-bold text-white hover:text-purple-300 transition-colors duration-200"
+    >
+      Krypton Game
+    </a>
   </div>
   <div class="navbar-end">
     <ThemeController />
-    <a class="btn btn-ghost btn-circle" href="/search" aria-label="Search">
-      <Search01 />
-    </a>
-    <a
-      class="btn btn-ghost btn-circle"
-      href={SITE.github}
-      target="_blank"
-      aria-label="GitHub"
-    >
-      <Github />
-    </a>
   </div>
 </div>

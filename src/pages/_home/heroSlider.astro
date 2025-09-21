@@ -1,0 +1,8 @@
+---
+import HeroSlider from "@/components/shared/HeroSlider.astro";
+import { articlesHandler } from "@/lib/handlers/articles";
+
+const heroArticles = articlesHandler.heroSliderArticles();
+---
+
+<HeroSlider articles={heroArticles} autoplay={true} interval={6000} />

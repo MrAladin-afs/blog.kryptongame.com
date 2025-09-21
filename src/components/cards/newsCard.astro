@@ -17,9 +17,9 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
 ---
 
 <article
-  class="col-span-1 group max-w-sm mx-auto flex flex-col gap-2 h-full relative isolate"
+  class="col-span-1 group max-w-sm mx-auto flex flex-col gap-2 h-full relative isolate zoom-card"
 >
-  <div class="aspect-video overflow-hidden rounded-md">
+  <div class="aspect-video overflow-hidden rounded-md zoom-container">
     <Image
       src={article.data.cover}
       alt={article.data.covert_alt
@@ -27,7 +27,7 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
         : article.data.title}
       loading={index < 3 ? "eager" : "lazy"}
       layout="constrained"
-      class="w-full h-full object-cover"
+      class="w-full h-full object-cover zoom-image"
     />
   </div>
   <div class="flex flex-col flex-1">
@@ -53,3 +53,31 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
     </div>
   </div>
 </article>
+
+<style>
+  .zoom-card {
+    cursor: grab;
+  }
+
+  .zoom-card:active {
+    cursor: grabbing;
+  }
+
+  .zoom-container {
+    overflow: hidden;
+  }
+
+  .zoom-image {
+    transition: transform 0.3s ease-out;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  .zoom-card:hover .zoom-image {
+    transform: scale(1.05);
+  }
+
+  .zoom-card:active .zoom-image {
+    transform: scale(1.1);
+  }
+</style>

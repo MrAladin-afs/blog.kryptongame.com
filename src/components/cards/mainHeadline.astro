@@ -17,8 +17,10 @@ const { remarkPluginFrontmatter } = await render(article);
 const category = categoriesHandler.oneCategory(article.data.category.id);
 ---
 
-<article class="group relative isolate flex flex-col-reverse md:flex-col gap-4">
-  <div class="aspect-video overflow-hidden rounded-md">
+<article
+  class="group relative isolate flex flex-col-reverse md:flex-col gap-4 zoom-card"
+>
+  <div class="aspect-video overflow-hidden rounded-md zoom-container">
     <Image
       src={article.data.cover}
       alt={article.data.covert_alt
@@ -26,6 +28,7 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
         : article.data.title}
       layout="constrained"
       loading={"eager"}
+      class="zoom-image"
     />
   </div>
   <div class="flex flex-col gap-2">
@@ -50,3 +53,31 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
     </div>
   </div>
 </article>
+
+<style>
+  .zoom-card {
+    cursor: grab;
+  }
+
+  .zoom-card:active {
+    cursor: grabbing;
+  }
+
+  .zoom-container {
+    overflow: hidden;
+  }
+
+  .zoom-image {
+    transition: transform 0.3s ease-out;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  .zoom-card:hover .zoom-image {
+    transform: scale(1.05);
+  }
+
+  .zoom-card:active .zoom-image {
+    transform: scale(1.1);
+  }
+</style>
