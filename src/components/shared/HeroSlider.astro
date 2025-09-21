@@ -44,7 +44,6 @@ const slidesData = await Promise.all(
               index === 0 ? 'opacity-100 z-20' : 'opacity-0 z-10'
             }`}
             data-slide={index}
-            style={`transform: translateZ(0); ${index === 0 ? '' : 'pointer-events: none;'}`}
           >
             <!-- Background Image -->
             <div class="absolute inset-0 z-0">
@@ -53,7 +52,7 @@ const slidesData = await Promise.all(
                 alt={article.data.covert_alt || article.data.title}
                 class="w-full h-full object-cover"
                 loading={index === 0 ? "eager" : "lazy"}
-                decoding={index === 0 ? "sync" : "async"}
+                decoding="async"
                 fetchpriority={index === 0 ? "high" : "low"}
               />
               <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
@@ -150,23 +149,21 @@ const slidesData = await Promise.all(
 </section>
 
 <script>
-  class OptimizedHeroSlider {
+  class HeroSlider {
     private slider: HTMLElement;
-    private slides: HTMLElement[];
-    private indicators: HTMLButtonElement[];
+    private slides: NodeListOf<HTMLElement>;
+    private indicators: NodeListOf<HTMLButtonElement>;
     private prevButton: HTMLButtonElement;
     private nextButton: HTMLButtonElement;
     private currentSlide: number = 0;
-    private autoplayInterval: number | null = null;
+    private autoplayInterval: NodeJS.Timeout | null = null;
     private isAutoplay: boolean;
     private interval: number;
-    private isTransitioning: boolean = false;
-    private eventListeners: Array<{ element: EventTarget; event: string; handler: EventListener }> = [];
 
     constructor(slider: HTMLElement) {
       this.slider = slider;
-      this.slides = Array.from(slider.querySelectorAll('[data-slide]'));
-      this.indicators = Array.from(slider.querySelectorAll('[data-slide-indicator]'));
+      this.slides = slider.querySelectorAll('[data-slide]');
+      this.indicators = slider.querySelectorAll('[data-slide-indicator]');
       this.prevButton = slider.querySelector('[data-slide-prev]')!;
       this.nextButton = slider.querySelector('[data-slide-next]')!;
       this.isAutoplay = slider.dataset.autoplay === 'true';
@@ -176,66 +173,38 @@ const slidesData = await Promise.all(
     }
 
     private init() {
-      // Use requestAnimationFrame for smooth animations
-      this.addEventListener(this.prevButton, 'click', () => this.prevSlide());
-      this.addEventListener(this.nextButton, 'click', () => this.nextSlide());
+      this.prevButton.addEventListener('click', () => this.prevSlide());
+      this.nextButton.addEventListener('click', () => this.nextSlide());
       
       this.indicators.forEach((indicator, index) => {
-        this.addEventListener(indicator, 'click', () => this.goToSlide(index));
+        indicator.addEventListener('click', () => this.goToSlide(index));
       });
 
-      // Pause on hover with passive listeners
-      this.addEventListener(this.slider, 'mouseenter', () => this.pauseAutoplay(), { passive: true });
-      this.addEventListener(this.slider, 'mouseleave', () => this.startAutoplay(), { passive: true });
+      this.slider.addEventListener('mouseenter', () => this.pauseAutoplay());
+      this.slider.addEventListener('mouseleave', () => this.startAutoplay());
 
-      // Start autoplay if enabled
       if (this.isAutoplay) {
         this.startAutoplay();
       }
     }
 
-    private addEventListener(element: EventTarget, event: string, handler: EventListener, options?: AddEventListenerOptions) {
-      element.addEventListener(event, handler, options);
-      this.eventListeners.push({ element, event, handler });
-    }
-
     private goToSlide(index: number) {
-      if (this.isTransitioning || index === this.currentSlide) return;
+      if (index === this.currentSlide) return;
       
-      this.isTransitioning = true;
-      
-      // Use requestAnimationFrame for smooth transitions
-      requestAnimationFrame(() => {
-        const currentSlideEl = this.slides[this.currentSlide];
-        const newSlideEl = this.slides[index];
-        const currentIndicator = this.indicators[this.currentSlide];
-        const newIndicator = this.indicators[index];
+      // Hide current slide
+      this.slides[this.currentSlide].classList.remove('opacity-100', 'z-20');
+      this.slides[this.currentSlide].classList.add('opacity-0', 'z-10');
+      this.indicators[this.currentSlide].classList.remove('bg-white', 'scale-110');
+      this.indicators[this.currentSlide].classList.add('bg-white/50');
+      this.indicators[this.currentSlide].setAttribute('aria-current', 'false');
 
-        // Batch DOM updates
-        currentSlideEl.style.opacity = '0';
-        currentSlideEl.style.pointerEvents = 'none';
-        currentSlideEl.style.zIndex = '10';
-        
-        newSlideEl.style.opacity = '1';
-        newSlideEl.style.pointerEvents = 'auto';
-        newSlideEl.style.zIndex = '20';
-
-        // Update indicators
-        currentIndicator.classList.remove('bg-white', 'scale-110');
-        currentIndicator.classList.add('bg-white/50');
-        currentIndicator.setAttribute('aria-current', 'false');
-
-        newIndicator.classList.remove('bg-white/50');
-        newIndicator.classList.add('bg-white', 'scale-110');
-        newIndicator.setAttribute('aria-current', 'true');
-
-        this.currentSlide = index;
-        
-        // Reset transition flag after animation completes
-        setTimeout(() => {
-          this.isTransitioning = false;
-        }, 700);
-      });
+      // Show new slide
+      this.currentSlide = index;
+      this.slides[this.currentSlide].classList.remove('opacity-0', 'z-10');
+      this.slides[this.currentSlide].classList.add('opacity-100', 'z-20');
+      this.indicators[this.currentSlide].classList.remove('bg-white/50');
+      this.indicators[this.currentSlide].classList.add('bg-white', 'scale-110');
+      this.indicators[this.currentSlide].setAttribute('aria-current', 'true');
     }
 
     private nextSlide() {
@@ -250,7 +219,7 @@ const slidesData = await Promise.all(
 
     private startAutoplay() {
       if (this.isAutoplay && !this.autoplayInterval) {
-        this.autoplayInterval = window.setInterval(() => {
+        this.autoplayInterval = setInterval(() => {
           this.nextSlide();
         }, this.interval);
       }
@@ -262,31 +231,14 @@ const slidesData = await Promise.all(
         this.autoplayInterval = null;
       }
     }
-
-    public destroy() {
-      this.pauseAutoplay();
-      this.eventListeners.forEach(({ element, event, handler }) => {
-        element.removeEventListener(event, handler);
-      });
-      this.eventListeners = [];
-    }
   }
 
-  // Initialize all hero sliders with cleanup
-  const sliders = new Map<HTMLElement, OptimizedHeroSlider>();
-  
+  // Initialize all hero sliders
   document.addEventListener('DOMContentLoaded', () => {
-    const sliderElements = document.querySelectorAll('[data-hero-slider]');
-    sliderElements.forEach(slider => {
-      const sliderInstance = new OptimizedHeroSlider(slider as HTMLElement);
-      sliders.set(slider as HTMLElement, sliderInstance);
+    const sliders = document.querySelectorAll('[data-hero-slider]');
+    sliders.forEach(slider => {
+      new HeroSlider(slider as HTMLElement);
     });
-  });
-
-  // Cleanup on page unload
-  window.addEventListener('beforeunload', () => {
-    sliders.forEach(slider => slider.destroy());
-    sliders.clear();
   });
 </script>
 
@@ -296,20 +248,5 @@ const slidesData = await Promise.all(
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-  }
-
-  /* Performance optimizations */
-  [data-hero-slider] {
-    contain: layout style paint;
-  }
-
-  [data-hero-slider] [data-slide] {
-    will-change: opacity;
-    backface-visibility: hidden;
-    transform: translateZ(0);
-  }
-
-  [data-hero-slider] [data-slide] img {
-    will-change: auto;
   }
 </style>
