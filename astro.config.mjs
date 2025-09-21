@@ -43,15 +43,5 @@ export default defineConfig({
   integrations,
   vite: {
     plugins: [tailwindcss()],
-    build: {
-      // Optimize build output
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-        },
-      },
-    },
   },
 });
