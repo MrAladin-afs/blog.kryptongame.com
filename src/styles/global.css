@@ -64,7 +64,10 @@
     max-width: none;
   }
   @media (min-width: 1280px) {
-    max-width: 1248px;
+    max-width: 1600px;
+  }
+  @media (min-width: 1920px) {
+    max-width: 1800px;
   }
 }
 
