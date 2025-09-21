@@ -29,7 +29,7 @@ export default defineConfig({
   image: {
     responsiveStyles: true,
     breakpoints: [640, 1024],
-    // Basic image optimization
+    // Optimize image delivery
     domains: ['files.fivemerr.com'],
     remotePatterns: [
       {
