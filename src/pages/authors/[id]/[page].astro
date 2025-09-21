@@ -50,11 +50,12 @@ const [HEADER] = entry.data.blocks;
   }}
 >
   <section class="flex-1">
-    <ul class="flex flex-col gap-4">
+    <ul class="flex flex-col">
       {
-        articles.map((article) => (
+        articles.map((article, index) => (
           <WideCard
             article={article}
+            isFirst={index === 0}
             isLast={articles.lastIndexOf(article) === articles.length - 1}
           />
         ))

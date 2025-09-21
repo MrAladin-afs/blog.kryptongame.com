@@ -7,13 +7,17 @@ import Divider from "../bases/divider.astro";
 type Props = {
   article: CollectionEntry<"articles">;
   isLast: boolean;
+  isFirst?: boolean;
 };
 
-const { article, isLast } = Astro.props;
+const { article, isLast, isFirst } = Astro.props;
 ---
 
 <li
-  class="group w-full max-w-md mx-auto lg:max-w-full relative isolate flex flex-col lg:flex-row gap-4"
+  class:list={[
+    "group w-full max-w-md mx-auto lg:max-w-full relative isolate flex flex-col lg:flex-row gap-4 py-2",
+    isFirst ? "pt-0" : "pt-2",
+  ]}
 >
   <div
     class="flex-shrink-0 aspect-square w-32 text-sm text-base-content/60 text-pretty capitalize hidden lg:flex pt-1"
