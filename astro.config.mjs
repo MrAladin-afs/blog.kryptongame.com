@@ -33,5 +33,11 @@ export default defineConfig({
   integrations,
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      cssCodeSplit: false, // This will help reduce render-blocking CSS
+    },
+  },
+  experimental: {
+    contentCollectionCache: true,
   },
 });
