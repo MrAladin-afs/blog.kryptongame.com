@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/base.astro";
 import { getEntry } from "astro:content";
 import Headlines from "@/pages/_home/headlines.astro";
 import LatestNews from "@/pages/_home/latestNews.astro";
+import heroImage from "@/assets/images/596921.jpg";
 
 const entry = await getEntry("views", "home");
 
@@ -19,7 +20,7 @@ if (!entry) {
     <!-- Background Image -->
     <div
       class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-      style="background-image: url('/src/assets/images/596921.jpg')"
+      style={`background-image: url(${heroImage.src})`}
     >
       <!-- Dark overlay for better text readability -->
       <div class="absolute inset-0 bg-black/50"></div>
