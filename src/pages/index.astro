@@ -22,18 +22,6 @@ if (!entry) {
       class="absolute inset-0 bg-cover bg-center bg-no-repeat"
       style={`background-image: url(${heroImage.src})`}
     >
-      23:17:06.815 17:17:06 [ERROR] [vite] ✗ Build failed in 362ms 23:17:07.013
-      [vite:terser] terser not found. Since Vite v3, terser has become an
-      optional dependency. You need to install it. 23:17:07.013 Location:
-      23:17:07.013
-      /vercel/path0/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:9752:13
-      23:17:07.013 Stack trace: 23:17:07.013 at loadTerserPath
-      (file:///vercel/path0/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:9752:13)
-      23:17:07.013 at Object.handler
-      (file:///vercel/path0/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:46529:15)
-      23:17:07.077 error: script "build" exited with code 1 23:17:07.080 Error:
-      Command "bun run build" exited with 1
-
       <!-- Dark overlay for better text readability -->
       <div class="absolute inset-0 bg-black/50"></div>
     </div>
@@ -76,11 +64,27 @@ if (!entry) {
     </div>
   </section>
 
-  <Headlines />
-  <LatestNews />
+  <!-- Divider after hero section -->
+  <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
-  <!-- Discord Widget Section -->
-  <section class="container mx-auto py-12">
+  <!-- Headlines Section with extra spacing -->
+  <div class="py-8">
+    <Headlines />
+  </div>
+
+  <!-- Divider after headlines -->
+  <div class="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+
+  <!-- Latest News Section with extra spacing -->
+  <div class="py-8">
+    <LatestNews />
+  </div>
+
+  <!-- Divider after latest news -->
+  <div class="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+
+  <!-- Discord Widget Section with extra spacing -->
+  <section class="container mx-auto py-16">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
       <!-- Discord Widget -->
       <div class="flex justify-center lg:justify-start">
