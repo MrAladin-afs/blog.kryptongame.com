@@ -34,6 +34,7 @@
 
   body {
     @apply font-sans antialiased h-full;
+    /* Remove padding-top to eliminate white line */
   }
 
   h1,
