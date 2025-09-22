@@ -15,28 +15,28 @@ export const SITE = {
 
 export const NAVIGATION_LINKS: Link[] = [
   {
-    href: "/categories/technology",
-    text: "Technology",
+    href: "/categories/guide",
+    text: "GUIDE",
   },
   {
-    href: "/categories/programming",
-    text: "Programming",
+    href: "/categories/xbox",
+    text: "XBOX",
   },
   {
-    href: "/categories/lifestyle",
-    text: "Lifestyle",
+    href: "/categories/playstation",
+    text: "PLAYSTATION",
   },
   {
-    href: "/categories/productivity",
-    text: "Productivity",
+    href: "/categories/nintendo",
+    text: "NINTENDO",
   },
   {
-    href: "/categories/health",
-    text: "Health",
+    href: "/categories/pc-games",
+    text: "PC GAMES",
   },
   {
-    href: "/categories/finance",
-    text: "Finance",
+    href: "/categories/reviews",
+    text: "REVIEWS",
   },
 ];
 
