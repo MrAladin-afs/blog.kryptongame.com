@@ -37,6 +37,13 @@
     /* Remove padding-top to eliminate white line */
   }
 
+  /* Rich dark-mode background with subtle color glows */
+  [data-theme=dark] body {
+    /* Solid dark navy background */
+    background-color: #0a1220;
+    background-image: none;
+  }
+
   h1,
   h2 {
     @apply font-serif;

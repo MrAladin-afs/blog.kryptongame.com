@@ -18,9 +18,13 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
 ---
 
 <article
-  class="group relative isolate flex flex-col-reverse md:flex-col gap-4 zoom-card"
+  class="group relative isolate flex flex-col-reverse md:flex-col gap-4 zoom-card border border-base-200 dark:border-white/20 rounded-md p-3 shadow-sm"
 >
-  <div class="aspect-video overflow-hidden rounded-md zoom-container">
+  <a
+    href={`/articles/${article.id}`}
+    aria-label={article.data.title}
+    class="block aspect-video overflow-hidden rounded-md zoom-container"
+  >
     <Image
       src={article.data.cover}
       alt={article.data.covert_alt
@@ -30,7 +34,7 @@ const category = categoriesHandler.oneCategory(article.data.category.id);
       loading={"eager"}
       class="zoom-image"
     />
-  </div>
+  </a>
   <div class="flex flex-col gap-2">
     <div>
       <h2
