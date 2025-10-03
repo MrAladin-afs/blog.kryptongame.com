@@ -27,8 +27,8 @@ export const NAVIGATION_LINKS: Link[] = [
     text: "PLAYSTATION",
   },
   {
-    href: "/categories/nintendo",
-    text: "NINTENDO",
+    href: "/categories/update",
+    text: "UPDATE",
   },
   {
     href: "/categories/pc-games",
