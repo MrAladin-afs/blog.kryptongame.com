@@ -17,14 +17,19 @@ export const articlesHandler = {
   allArticles: () => articlesCollection,
 
   mainHeadline: () => {
-    const article = articlesCollection.filter(
+    const explicitMain = articlesCollection.filter(
       (article) => article.data.isMainHeadline === true
     )[0];
-    if (!article)
-      throw new Error(
-        "Please ensure there is at least one item to display for the main headline."
-      );
-    return article;
+    if (explicitMain) return explicitMain;
+
+    // Fallback: use the most recent article if none explicitly marked
+    const fallback = articlesCollection[0];
+    if (fallback) return fallback;
+
+    // No articles at all
+    throw new Error(
+      "Please add at least one article to display for the main headline."
+    );
   },
 
   subHeadlines: () => {
@@ -66,9 +71,14 @@ export const articlesHandler = {
       subHeadlines.push(mainHeadline);
     }
 
+    // If still empty but there are articles, return up to desiredCount recent ones (may include main)
+    if (subHeadlines.length === 0) {
+      subHeadlines = articlesCollection.slice(0, desiredCount);
+    }
+
     if (subHeadlines.length === 0)
       throw new Error(
-        "Please ensure there is at least one item to display for the sub headlines."
+        "Please add at least one article to display for the sub headlines."
       );
     return subHeadlines;
   },
