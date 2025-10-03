@@ -7,10 +7,10 @@ import { modifiedTime, readingTime } from "./src/lib/utils/remarks.mjs";
 import { SITE } from "./src/lib/config";
 import keystatic from "@keystatic/astro";
 import react from "@astrojs/react";
-import { loadEnv } from "vite";
 import pagefind from "astro-pagefind";
 
-const { RUN_KEYSTATIC } = loadEnv(import.meta.env.MODE, process.cwd(), "");
+// Read directly from environment to avoid importing Vite in config during SSR on Vercel
+const { RUN_KEYSTATIC } = process.env;
 
 const integrations = [mdx(), sitemap(), pagefind()];
 
