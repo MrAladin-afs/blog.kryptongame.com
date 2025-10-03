@@ -3,7 +3,6 @@ import BaseLayout from "@/layouts/base.astro";
 import { getEntry } from "astro:content";
 import Headlines from "@/pages/_home/headlines.astro";
 import LatestNews from "@/pages/_home/latestNews.astro";
-import heroImage from "@/assets/images/596921.jpg";
 
 const entry = await getEntry("views", "home");
 
@@ -13,60 +12,6 @@ if (!entry) {
 ---
 
 <BaseLayout entry={entry}>
-  <!-- Hero Banner Section - Start from top with negative margin to account for fixed header -->
-  <section
-    class="relative w-full h-screen overflow-hidden -mt-[120px] pt-[120px]"
-  >
-    <!-- Background Image -->
-    <div
-      class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-      style={`background-image: url(${heroImage.src})`}
-    >
-      <!-- Dark overlay for better text readability -->
-      <div class="absolute inset-0 bg-black/50"></div>
-    </div>
-
-    <!-- Content Overlay -->
-    <div class="relative z-10 h-full flex items-center justify-center">
-      <div class="container mx-auto px-4 text-center text-white">
-        <div class="max-w-4xl mx-auto">
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            Welcome to Krypton Game
-          </h1>
-          <p class="text-xl md:text-2xl mb-8 text-gray-200">
-            Your Ultimate FiveM Gaming Experience
-          </p>
-          <div class="mb-8 max-w-2xl mx-auto">
-            <a
-              href="https://kryptongame.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-3 px-8 py-4 bg-white text-purple-700 font-bold text-lg rounded-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
-            >
-              <svg
-                class="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                ></path>
-              </svg>
-              Visit kryptongame.com
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Divider after hero section -->
-  <div class="border-t border-gray-200 dark:border-gray-700"></div>
-
   <!-- Headlines Section with extra spacing -->
   <div class="py-8">
     <Headlines />
