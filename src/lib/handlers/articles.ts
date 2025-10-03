@@ -17,14 +17,19 @@ export const articlesHandler = {
   allArticles: () => articlesCollection,
 
   mainHeadline: () => {
-    const article = articlesCollection.filter(
+    const marked = articlesCollection.filter(
       (article) => article.data.isMainHeadline === true
     )[0];
-    if (!article)
+    if (marked) return marked;
+
+    // Fallback: use most recent article if none is explicitly marked
+    const fallback = articlesCollection[0];
+    if (!fallback) {
       throw new Error(
         "Please ensure there is at least one item to display for the main headline."
       );
-    return article;
+    }
+    return fallback;
   },
 
   subHeadlines: () => {
