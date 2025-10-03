@@ -3,8 +3,14 @@ import { getCollection } from "astro:content";
 const articlesCollection = (
   await getCollection("articles", ({ data }) => {
     // In development, include future posts to make previewing easier.
-    // In production, include only posts published up to now (inclusive).
-    const isPublished = new Date(data.publishedTime) <= new Date();
+    // In production, include items published up to now OR with the same calendar date as today.
+    const articleDate = new Date(data.publishedTime);
+    const now = new Date();
+    const isSameDay =
+      articleDate.getFullYear() === now.getFullYear() &&
+      articleDate.getMonth() === now.getMonth() &&
+      articleDate.getDate() === now.getDate();
+    const isPublished = articleDate <= now || isSameDay;
     return data.isDraft !== true && (import.meta.env.DEV || isPublished);
   })
 ).sort((a, b) =>
