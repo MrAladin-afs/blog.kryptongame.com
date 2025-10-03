@@ -1,0 +1,16 @@
+{
+  "framework": "astro",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "dist",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "functions": {
+    "nodejs": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "env": {
+    "RUN_KEYSTATIC": "false",
+    "SITE_URL": "https://blog.kryptongame.com",
+    "SITE_BASE": "/"
+  }
+}
