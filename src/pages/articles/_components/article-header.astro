@@ -8,7 +8,6 @@ import Calendar04 from "@/assets/svgs/calendar-04.astro";
 import Divider from "@/components/bases/divider.astro";
 import { categoriesHandler } from "@/lib/handlers/categories";
 import { authorsHandler } from "@/lib/handlers/authors";
-import Share from "@/components/elements/share.astro";
 
 type Props = {
   article: CollectionEntry<"articles">;
@@ -79,7 +78,7 @@ const authors = authorsHandler.getAuthors(article.data.authors);
         </span>
       </div>
       <!-- TODO: fix name, href, avatar of author -->
-      <div class="w-full flex flex-wrap gap-2 items-center justify-between">
+      <div class="w-full flex flex-wrap gap-2 items-center">
         <div class="flex flex-wrap gap-4">
           {
             authors.map((author) => (
@@ -108,7 +107,6 @@ const authors = authorsHandler.getAuthors(article.data.authors);
             ))
           }
         </div>
-        <Share text={article.data.title} />
       </div>
     </div>
   </div>

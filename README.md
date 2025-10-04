@@ -1,11 +1,11 @@
-# Astro News 📰
+# krypton blog 📰
 
 A news website built with Astro, designed to provide a modern and responsive news reading experience.
 
 > **ℹ️ Info**  
-> Astro news is my first open-source project, so there may be some bugs or issues. I’ll address them as quickly as possible.
+> krypton blog is my first open-source project, so there may be some bugs or issues. I’ll address them as quickly as possible.
 
-![Astro News](./src/assets/images/screenshot-astronews.png "Astro News")
+![krypton blog](./src/assets/images/screenshot-astronews.png "krypton blog")
 
 ![performances](./src/assets/images/Performances.png "Performances")
 
