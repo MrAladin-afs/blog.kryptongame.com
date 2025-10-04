@@ -5,7 +5,7 @@ import { t as typeHandlers, a as types } from './index_MaT6fT73.mjs';
 import 'kleur/colors';
 import * as mime from 'mrmime';
 import 'clsx';
-/* empty css                         */
+/* empty css                           */
 
 const DEFAULT_RESOLUTIONS = [
   640,
@@ -508,7 +508,7 @@ async function getConfiguredImageService() {
   if (!globalThis?.astroAsset?.imageService) {
     const { default: service } = await import(
       // @ts-expect-error
-      './sharp_BrSq04Bh.mjs'
+      './sharp_DVKp8LWn.mjs'
     ).catch((e) => {
       const error = new AstroError(InvalidImageService);
       error.cause = e;
