@@ -63,8 +63,8 @@ export const getMeta = async (
         title,
         metaTitle: capitalizeFirstLetter(collection.data.title),
         description: collection.data.description,
-        ogImage: defaultImage.src,
-        ogImageAlt: SITE.title,
+        ogImage: "https://files.fivemerr.com/images/51e410ec-b1f0-4b10-94d9-f202bba462a4.png",
+        ogImageAlt: "",
         type: "website",
       };
       renderCache.set(cacheKey, meta);
