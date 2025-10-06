@@ -1,16 +1,30 @@
 import { getCollection } from "astro:content";
 
+function getLocalYmd(date: Date, timeZone: string) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  return { year: get("year"), month: get("month"), day: get("day") };
+}
+
 const articlesCollection = (
   await getCollection("articles", ({ data }) => {
-    // In development, include future posts to make previewing easier.
-    // In production, include items published up to now OR with the same calendar date as today.
     const articleDate = new Date(data.publishedTime);
     const now = new Date();
-    const isSameDay =
-      articleDate.getFullYear() === now.getFullYear() &&
-      articleDate.getMonth() === now.getMonth() &&
-      articleDate.getDate() === now.getDate();
-    const isPublished = articleDate <= now || isSameDay;
+
+    // Allow configuring what "same calendar day" means via CONTENT_TZ (IANA tz).
+    const tz = (import.meta.env.CONTENT_TZ as string) || "UTC";
+    const a = getLocalYmd(articleDate, tz);
+    const b = getLocalYmd(now, tz);
+    const isSameLocalDay = a.year === b.year && a.month === b.month && a.day === b.day;
+
+    // In dev, include everything (including future-dated content) for previewing.
+    // In prod, include if already published (UTC) or is scheduled for "today" in the chosen timezone.
+    const isPublished = articleDate <= now || isSameLocalDay;
     return data.isDraft !== true && (import.meta.env.DEV || isPublished);
   })
 ).sort((a, b) =>

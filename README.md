@@ -49,6 +49,17 @@ bun dev
 
 4. Open `http://localhost:4321/keystatic` in your browser.
 
+### Publishing timezone
+
+Set `CONTENT_TZ` to your preferred IANA timezone (e.g., `Asia/Dhaka`, `America/New_York`).
+
+- In development (`astro dev`), all dates are shown, including future ones.
+- In production, posts are included when either:
+  - `publishedTime` is in the past (UTC), or
+  - `publishedTime` falls on "today" in `CONTENT_TZ`.
+
+Configure this in your deployment environment variables (e.g., Vercel Project Settings → Environment Variables).
+
 ## ✨ Features
 
 ### Implemented Features
