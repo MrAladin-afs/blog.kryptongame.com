@@ -55,6 +55,10 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
   <!-- Canonical URL -->
   <link rel="canonical" href={canonicalURL} />
 
+  <!-- Google Indexing -->
+  <meta name="robots" content="index, follow" />
+  <meta name="googlebot" content="index, follow" />
+
   <!-- Page Metadata -->
   <title>{meta.title}</title>
   <meta name="title" content={meta.metaTitle} />
