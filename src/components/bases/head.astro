@@ -20,6 +20,72 @@ const isArticleMeta = (props: Props["meta"]): props is ArticleMeta =>
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 
 const OGImage = new URL(meta.ogImage, Astro.url).href;
+
+// JSON-LD Structured Data Function
+function getStructuredData(
+  meta: Meta | ArticleMeta,
+  canonicalURL: string,
+  ogImage: string,
+) {
+  const baseStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.title,
+    description: SITE.description,
+    url: SITE.url,
+    publisher: {
+      "@type": "Organization",
+      name: SITE.title,
+      url: SITE.url,
+      logo: {
+        "@type": "ImageObject",
+        url: "https://files.fivemerr.com/images/ac6462c4-e383-4afb-97a2-e6be2e9c7294.png",
+      },
+    },
+  };
+
+  if (isArticleMeta(meta)) {
+    // Article structured data
+    return {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: meta.metaTitle,
+      description: meta.description,
+      image: ogImage,
+      url: canonicalURL,
+      datePublished: new Date(meta.publishedTime).toISOString(),
+      dateModified: new Date(meta.lastModified).toISOString(),
+      author: meta.authors.map((author) => ({
+        "@type": "Person",
+        name: author.name,
+        url: `${SITE.url}/authors/${author.link}`,
+      })),
+      publisher: {
+        "@type": "Organization",
+        name: SITE.title,
+        url: SITE.url,
+        logo: {
+          "@type": "ImageObject",
+          url: "https://files.fivemerr.com/images/ac6462c4-e383-4afb-97a2-e6be2e9c7294.png",
+        },
+      },
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonicalURL,
+      },
+    };
+  } else {
+    // Website/Page structured data
+    return {
+      ...baseStructuredData,
+      "@type": "WebPage",
+      name: meta.metaTitle,
+      description: meta.description,
+      url: canonicalURL,
+      image: ogImage,
+    };
+  }
+}
 ---
 
 <head>
@@ -105,6 +171,12 @@ const OGImage = new URL(meta.ogImage, Astro.url).href;
       </>
     ) : null
   }
+
+  <!-- JSON-LD Structured Data -->
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(getStructuredData(meta, canonicalURL, OGImage))}
+  />
 
   <ClientRouter />
 </head>
